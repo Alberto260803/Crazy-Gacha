@@ -1,0 +1,29 @@
+﻿<Window x:Class="Crazy_Gacha.Inicio"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Crazy_Gacha"
+        mc:Ignorable="d"
+        Title="Crazy Gacha - Inicio de sesión" Height="450" Width="800" MaxHeight="450" MaxWidth="800" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
+
+        <Label Content="BIENVENIDO" FontSize="50" HorizontalAlignment="Center" FontFamily="Karma Future" Height="80" VerticalAlignment="Top" Margin="0,16,0,0"/>
+
+        <Image Grid.Column="2" Name="imgLogo" Source="Resources/Logo.png"/>
+
+        <Label Grid.Column="0" Content="Nombre de usuario:" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="146,116,0,0"/>
+        <TextBox Name="tbUsuario" Width="200" Height="37" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,146,0,0" KeyDown="tbUsuario_KeyDown"/>
+        <Label Grid.Column="0" Content="Contraseña:" FontSize="15" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="146,198,0,0" Width="90"/>
+        <PasswordBox Width="200" Height="37" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,233,0,0" Name="tbPassword" PasswordChar="●" FontSize="15" VerticalContentAlignment="Center" KeyDown="tbPassword_KeyDown"/>
+        <TextBox Width="200" Height="37" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,233,0,0" Name="tbVisiblePassword" Visibility="Hidden" FontSize="15" VerticalContentAlignment="Center" KeyDown="tbVisiblePassword_KeyDown"/>
+        <Image Grid.Column="0" Width="30" Height="30" Margin="352,236,0,0" Stretch="Fill" Name="ojo_cerrado" MouseLeftButtonDown="ojo_cerrado_MouseLeftButtonDown" Source="Resources/ojo-ocultar.png" VerticalAlignment="Top" HorizontalAlignment="Left" RenderTransformOrigin="0.482,0.513"/>
+        <Button Width="200" Height="53" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,330,0,0" Content="Entrar" FontSize="30" Name="btEntrar" Click="btEntrar_Click"/>
+        <Label Content="Crear cuenta" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,382,0,0" Foreground="Gray" MouseLeftButtonDown="Label_MouseLeftButtonDown"/>
+    </Grid>
+</Window>

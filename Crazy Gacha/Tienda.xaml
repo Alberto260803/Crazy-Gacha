@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Crazy_Gacha.Tienda"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Crazy_Gacha"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="395">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="125"/>
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+            <!-- columna del listbox-->
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="2" Height="65" VerticalAlignment="Top" Name="txtNombreMejora" TextAlignment="Left"/>
+        <TextBlock Grid.Column="2" Height="65" Width="20" HorizontalAlignment="Right" Name="txtCantidad"/>
+        <Image Grid.Column="2" Height="40" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Name="imgMoneda" Source="Resources/moneda.png" Stretch="UniformToFill"/>
+        <TextBlock Grid.Column="2" Height="30" Width="225" VerticalAlignment="Bottom" Name="txtPrecioMejora" HorizontalAlignment="Right"/>
+        <Image Grid.Column="0" Name="imgMejora"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crazy Gacha", "Crazy Gacha\Crazy Gacha.csproj", "{CAFA6001-DF6A-4066-82A6-3FE5838534A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAFA6001-DF6A-4066-82A6-3FE5838534A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAFA6001-DF6A-4066-82A6-3FE5838534A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAFA6001-DF6A-4066-82A6-3FE5838534A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAFA6001-DF6A-4066-82A6-3FE5838534A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8DF6F0B5-63C0-41C2-95CB-E445EF598D62}
+	EndGlobalSection
+EndGlobal

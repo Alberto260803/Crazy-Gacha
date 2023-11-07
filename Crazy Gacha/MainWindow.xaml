@@ -1,0 +1,50 @@
+﻿<Window x:Class="Crazy_Gacha.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Crazy_Gacha"
+        mc:Ignorable="d"
+        Title="Crazy Gacha" Height="450" Width="800" Loaded="Window_Loaded" MinHeight="450" MinWidth="800" WindowState="Maximized">
+    <DockPanel>
+        <Grid Height="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Width="150" Height="50" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Image Name="User" VerticalAlignment="Center" Stretch="Uniform" Width="Auto" Height="Auto" Source="Resources/usuario.png"/>
+                <TextBlock x:Name="tbNombre" VerticalAlignment="Top" Grid.Column="1" Height="34" TextAlignment="Center" TextWrapping="Wrap"/>
+            </Grid>
+
+            <Label Name="NumEgg" HorizontalAlignment="Center" Height="62" Margin="0,10,0,0" VerticalAlignment="Top" Width="169" FontSize="40" HorizontalContentAlignment="Center" FontWeight="Bold" FontFamily="Karma Future"/>
+            <Grid Margin="0,72,0,0">
+                <Viewbox>
+                    <Image Name="Egg" Height="320" Width="338" MouseLeftButtonDown="Egg_MouseLeftButtonDown" Stretch="UniformToFill" Margin="104,21,103,21">
+                        <Image.RenderTransform>
+                            <RotateTransform Angle="0" CenterY="200" CenterX="200"/>
+                        </Image.RenderTransform>
+                    </Image>
+                </Viewbox>
+            </Grid>
+            <Rectangle Fill="#0074E4" VerticalAlignment="Top" Height="50" Grid.Column="2"/>
+            <ScrollViewer Grid.Column="2" Margin="0,50,0,0">
+                <StackPanel Orientation="Vertical">
+                    <TabControl>
+                        <TabItem Header="Mejoras ratón" Background="CornflowerBlue">
+                            <ListBox x:Name="listBoxMouse">
+
+                            </ListBox>
+                        </TabItem>
+                    </TabControl>
+                </StackPanel>
+            </ScrollViewer>
+            <TextBlock Grid.Column="2" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="TIENDA" VerticalAlignment="Top" Height="31" Width="202" TextAlignment="Center" FontFamily="Karma Future" FontSize="25" FontWeight="Black" Foreground="White"/>
+        </Grid>
+    </DockPanel>
+</Window>

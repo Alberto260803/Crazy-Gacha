@@ -1,0 +1,9 @@
+﻿<Application x:Class="Crazy_Gacha.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Crazy_Gacha"
+             StartupUri="Inicio.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
