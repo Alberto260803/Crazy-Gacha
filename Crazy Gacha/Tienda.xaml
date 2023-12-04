@@ -5,18 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Crazy_Gacha"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="395">
-    <Grid>
+             d:DesignHeight="100" d:DesignWidth="350">
+    <Grid Width="Auto" HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="125"/>
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
             <!-- columna del listbox-->
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="2" Height="65" VerticalAlignment="Top" Name="txtNombreMejora" TextAlignment="Left"/>
-        <TextBlock Grid.Column="2" Height="65" Width="20" HorizontalAlignment="Right" Name="txtCantidad"/>
+
+        <Label Grid.Column="2" Height="50" VerticalAlignment="Top" Name="lblNombreMejora" VerticalContentAlignment="Center" FontFamily="Arial" FontSize="35"/>
         <Image Grid.Column="2" Height="40" Width="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Name="imgMoneda" Source="Resources/moneda.png" Stretch="UniformToFill"/>
-        <TextBlock Grid.Column="2" Height="30" Width="225" VerticalAlignment="Bottom" Name="txtPrecioMejora" HorizontalAlignment="Right"/>
+        <Label Grid.Column="2" Height="40" Width="Auto" VerticalAlignment="Bottom" Name="lblPrecioMejora" Margin="40,0,0,0" FontSize="20" FontFamily="Arial" FontWeight="Black" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+        <Label VerticalContentAlignment="Center" HorizontalContentAlignment="Right" Grid.Column="2" Height="65" Width="60" HorizontalAlignment="Right" VerticalAlignment="Center" Name="lblCantidad" FontFamily="Karma Future" FontSize="35"/>
         <Image Grid.Column="0" Name="imgMejora"/>
     </Grid>
 </UserControl>

@@ -1,12 +1,15 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Crazy_Gacha
+namespace Crazy_Gacha.Clases
 {
     class Recursos
     {
@@ -20,5 +23,6 @@ namespace Crazy_Gacha
 
             return builder.ToString();
         }
+
     }
 }

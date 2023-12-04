@@ -37,8 +37,13 @@
                 <StackPanel Orientation="Vertical">
                     <TabControl>
                         <TabItem Header="Mejoras ratón" Background="CornflowerBlue">
-                            <ListBox x:Name="listBoxMouse">
-
+                            <ListBox x:Name="listBoxMouse" SelectionMode="Single">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                        <EventSetter Event="UIElement.PreviewMouseDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
                             </ListBox>
                         </TabItem>
                     </TabControl>

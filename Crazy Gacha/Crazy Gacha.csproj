@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Resources\Logo.png" />
+    <None Remove="Resources\moneda.png" />
     <None Remove="Resources\ojo-ocultar.png" />
     <None Remove="Resources\ojo-visible.png" />
     <None Remove="Resources\usuario.png" />
@@ -24,6 +25,9 @@
     <Resource Include="Resources\Logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\moneda.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\ojo-ocultar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -36,9 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\moneda.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\Pou.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

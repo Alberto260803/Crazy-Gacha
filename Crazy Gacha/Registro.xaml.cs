@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Crazy_Gacha.Clases;
 using MySql.Data.MySqlClient;
 
 namespace Crazy_Gacha
@@ -25,6 +26,7 @@ namespace Crazy_Gacha
     {
         public string nombre_usuario = "";
         public string pass = "";
+        public int idUsuario = 0;
         private List<string> errorMessages = new List<string>();
         private Recursos recursos = new Recursos();
         public Registro()
@@ -63,8 +65,9 @@ namespace Crazy_Gacha
 
                     if (result == 1)
                     {
+                        idUsuario = (int) command.LastInsertedId;
                         MessageBox.Show("Datos guardados correctamente");
-                        MainWindow mainWindow = new MainWindow(nombre_usuario);
+                        MainWindow mainWindow = new MainWindow(nombre_usuario, idUsuario);
                         mainWindow.Show();
                         this.Close();
                     }

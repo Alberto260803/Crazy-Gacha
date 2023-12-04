@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Crazy_Gacha.Clases;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,9 @@ namespace Crazy_Gacha
     /// </summary>
     public partial class Inicio : Window
     {
-        public string nombre;
-        public string pass;
+        public string nombre = "";
+        public string pass = "";
+        public int idUsuario = 0;
         List<string> errorMessages = new List<string>();
         private Recursos recursos = new Recursos();
         public Inicio()
@@ -36,7 +38,16 @@ namespace Crazy_Gacha
                 MySqlConnection conn = new MySqlConnection(recursos.ConectarBD());
                 conn.Open();
                 nombre = tbUsuario.Text;
-                pass = tbPassword.Password;
+
+                if (tbPassword.Visibility == Visibility.Visible)
+                {
+                    pass = tbPassword.Password;
+                }
+
+                else
+                {
+                    pass = tbVisiblePassword.Text;
+                }
 
                 string query = "SELECT * FROM usuario WHERE nombre=@usuario AND password=@contra";
                 MySqlCommand command = new MySqlCommand(query, conn);
@@ -44,9 +55,10 @@ namespace Crazy_Gacha
                 command.Parameters.AddWithValue("@contra", pass);
 
                 MySqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
+                if (reader.Read() && !reader.IsDBNull(0))
                 {
-                    MainWindow mainWindow = new MainWindow(nombre);
+                    idUsuario = reader.GetInt32("id");
+                    MainWindow mainWindow = new MainWindow(nombre, idUsuario);
                     mainWindow.Show();
                     this.Close();
                 }
@@ -65,6 +77,13 @@ namespace Crazy_Gacha
             catch (Exception ex)
             {
                 errorMessages.Add(ex.ToString());
+            }
+
+            if (errorMessages.Count > 0)
+            {
+                string errorMessage = string.Join("\n", errorMessages);
+                MessageBox.Show(this,errorMessage);
+                errorMessages.Clear();
             }
         }
 

@@ -27,23 +27,23 @@ namespace Crazy_Gacha
 
         public string NombreMejora
         {
-            get { return txtNombreMejora.Text; }
+            get { return lblNombreMejora.Content.ToString(); }
             set
             {
-                txtNombreMejora.Text = value;
+                lblNombreMejora.Content = value;
             }
         }
 
         public float Precio
         {
-            get { return float.Parse(txtPrecioMejora.Text);}
-            set { txtPrecioMejora.Text = value.ToString(); }
+            get { return float.Parse(lblPrecioMejora.Content.ToString());}
+            set { lblPrecioMejora.Content = value.ToString(); }
         }
 
         public int Cantidad
         {
-            get { return int.Parse(txtCantidad.Text); }
-            set { txtCantidad.Text = value.ToString(); }
+            get { return int.Parse(lblCantidad.Content.ToString()); }
+            set { lblCantidad.Content = value.ToString(); }
         }
 
         public ImageSource ImagenMejora
@@ -55,6 +55,15 @@ namespace Crazy_Gacha
                 {
                     imgMejora.Source = value;
                 }
+            }
+        }
+
+        public ImageSource ImagenMoneda
+        {
+            get { return imgMoneda.Source; }
+            set
+            {
+                imgMoneda.Source = new BitmapImage(new Uri("moneda.png", UriKind.Relative));
             }
         }
     }
