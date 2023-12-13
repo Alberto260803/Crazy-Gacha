@@ -1,5 +1,6 @@
 ﻿using Crazy_Gacha.Clases;
 using MySql.Data.MySqlClient;
+using NAudio.Wave;
 using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections;
@@ -8,6 +9,8 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Net;
+using System.Net.Http;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +43,7 @@ namespace Crazy_Gacha
         private static Recursos recursos = new Recursos();
         private MySqlConnection conn = new MySqlConnection(recursos.ConectarBD());
         private List<Tienda> itemsClicks = new List<Tienda>();
-        int clicksUser = 1;
+        private int clicksUser = 1;
         private int idUsuario = 0;
 
         private void MediaPlayer_MediaEnded(object? sender, EventArgs e)
@@ -91,15 +94,15 @@ namespace Crazy_Gacha
                 {
                     conn.Open();
 
-                    string query = "SELECT audio FROM premios WHERE id=1";
+                    string query = "SELECT linkAudio FROM premios WHERE id=1";
                     MySqlCommand command = new MySqlCommand(query, conn);
 
                     MySqlDataReader reader = command.ExecuteReader();
                     if (reader.Read() && !reader.IsDBNull(0))
                     {
                         // Reproducir el audio
-                        byte[] audioData = (byte[])reader["audio"];
-                        ReproducirSonido(audioData);
+                        string linkAudio = reader.GetString("linkAudio");
+                        LlamarReproducirSonido(linkAudio);
                     }
                     else
                     {
@@ -169,7 +172,8 @@ namespace Crazy_Gacha
             {
                 conn.Open();
 
-                string query = "SELECT * FROM premios WHERE rareza=@rareza ORDER BY RAND() LIMIT 1;";
+                //string query = "SELECT * FROM premios WHERE rareza=@rareza ORDER BY RAND() LIMIT 1;";
+                string query = "SELECT * FROM premios WHERE rareza=@rareza;";
                 MySqlCommand command = new MySqlCommand(query, conn);
                 command.Parameters.AddWithValue("@rareza", prob);
 
@@ -181,18 +185,32 @@ namespace Crazy_Gacha
                     string nombre = reader.GetString("nombre");
                     Premio.Rareza = rareza;
                     Premio.Nombre = nombre;
-                    byte[] bytes = (byte[])reader["imagen"];
-                    BitmapImage image = new BitmapImage();
-                    using (MemoryStream stream = new MemoryStream(bytes))
+
+                    string blobUrl = reader.GetString("linkImagen");
+
+                    using (WebClient webClient = new WebClient())
                     {
-                        image.BeginInit();
-                        image.CacheOption = BitmapCacheOption.OnLoad;
-                        image.StreamSource = stream;
-                        image.EndInit();
+                        byte[] imageData = webClient.DownloadData(blobUrl);
+
+                        // Convertir los datos descargados a BitmapImage
+                        BitmapImage image = new BitmapImage();
+                        using (MemoryStream stream = new MemoryStream(imageData))
+                        {
+                            image.BeginInit();
+                            image.CacheOption = BitmapCacheOption.OnLoad;
+                            image.StreamSource = stream;
+                            image.EndInit();
+                        }
+
+                        // Asignar la imagen a tu objeto Premio
+                        Premio.ImagenPremio = image;
                     }
-                    Premio.ImagenPremio = image;
-                    byte[] audioData = (byte[])reader["audio"];
-                    ReproducirSonido(audioData);
+
+                    /*byte[] audioData = (byte[])reader["audio"];
+                    ReproducirSonido(audioData);*/
+
+                    string audioUrl = reader.GetString("linkAudio");
+                    LlamarReproducirSonido(audioUrl);
 
                     Premio.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
@@ -222,6 +240,11 @@ namespace Crazy_Gacha
             }
             numegg = 5;
             NumEgg.Content = numegg;
+        }
+
+        private async void LlamarReproducirSonido(string audioUrl)
+        {        
+            await ReproducirSonidoDesdeURL(audioUrl);
         }
 
 
@@ -254,6 +277,37 @@ namespace Crazy_Gacha
             }
         }
 
+        async Task ReproducirSonidoDesdeURL(string audioUrl)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                try
+                {
+                    byte[] audioBytes = await httpClient.GetByteArrayAsync(audioUrl);
+
+                    using (MemoryStream audioStream = new MemoryStream(audioBytes))
+                    {
+                        using (var waveOut = new WaveOutEvent()) // WaveOutEvent para reproducir el audio
+                        {
+                            using (var waveStream = new Mp3FileReader(audioStream))
+                            {
+                                waveOut.Init(waveStream);
+                                waveOut.Play();
+                                while (waveOut.PlaybackState == PlaybackState.Playing)
+                                {
+                                    await Task.Delay(100); // Espera hasta que termine de reproducirse
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al reproducir audio desde URL: {ex.Message}", "Error");
+                }
+            }
+        }
+
 
         private void CargarTienda()
         {
@@ -283,15 +337,22 @@ namespace Crazy_Gacha
                             };
 
                             // Cargar la imagen desde la base de datos y asignarla a ImagenMejora
-                            byte[] bytes = (byte[])reader["imagenMejora"];
-                            using (MemoryStream stream = new MemoryStream(bytes))
+                            string blobUrl = reader.GetString("linkImagenMejora");
+
+                            using (WebClient webClient = new WebClient())
                             {
+                                byte[] imageData = webClient.DownloadData(blobUrl);
+
+                                // Convertir los datos descargados a BitmapImage
                                 BitmapImage image = new BitmapImage();
-                                image.BeginInit();
-                                image.CacheOption = BitmapCacheOption.OnLoad;
-                                image.StreamSource = stream;
-                                image.EndInit();
-                                tiendaItem.ImagenMejora = image;
+                                using (MemoryStream stream = new MemoryStream(imageData))
+                                {
+                                    image.BeginInit();
+                                    image.CacheOption = BitmapCacheOption.OnLoad;
+                                    image.StreamSource = stream;
+                                    image.EndInit();
+                                    tiendaItem.ImagenMejora = image;
+                                }
                             }
 
                             itemsClicks.Add(tiendaItem);
@@ -343,22 +404,29 @@ namespace Crazy_Gacha
             {
                 conn.Open();
 
-                string query = "SELECT imagen FROM premios WHERE id=1";
+                string query = "SELECT linkImagen FROM premios WHERE id=1";
                 MySqlCommand command = new MySqlCommand(query, conn);
 
                 MySqlDataReader reader = command.ExecuteReader();
                 if (reader.Read() && !reader.IsDBNull(0))
                 {
-                    BitmapImage image = new BitmapImage();
-                    byte[] bytes = (byte[])reader["imagen"];
-                    using (MemoryStream stream = new MemoryStream(bytes))
+                    string blobUrl = reader.GetString("linkImagen");
+
+                    using (WebClient webClient = new WebClient())
                     {
-                        image.BeginInit();
-                        image.CacheOption = BitmapCacheOption.OnLoad;
-                        image.StreamSource = stream;
-                        image.EndInit();
+                        byte[] imageData = webClient.DownloadData(blobUrl);
+
+                        // Convertir los datos descargados a BitmapImage
+                        BitmapImage image = new BitmapImage();
+                        using (MemoryStream stream = new MemoryStream(imageData))
+                        {
+                            image.BeginInit();
+                            image.CacheOption = BitmapCacheOption.OnLoad;
+                            image.StreamSource = stream;
+                            image.EndInit();
+                            Egg.Source = image;
+                        }
                     }
-                    Egg.Source = image;
                 }
                 else
                 {
