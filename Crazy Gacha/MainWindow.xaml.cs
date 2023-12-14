@@ -36,12 +36,12 @@ namespace Crazy_Gacha
     public partial class MainWindow : Window
     {
         int numegg = 5;
+        private WaveOutEvent waveOut;
         private MediaPlayer? player;
         private MediaPlayer mediaPlayer = new MediaPlayer();
         private DispatcherTimer? timer;
-        private string nombre = "";
         private static Recursos recursos = new Recursos();
-        private MySqlConnection conn = new MySqlConnection(recursos.ConectarBD());
+        private MySqlConnection conn;
         private List<Tienda> itemsClicks = new List<Tienda>();
         private int clicksUser = 1;
         private int idUsuario = 0;
@@ -62,6 +62,7 @@ namespace Crazy_Gacha
             NumEgg.Content = numegg;
             tbNombre.Text = nombre;
             idUsuario = idUsu;
+            conn = new MySqlConnection(recursos.ConectarBD());
             Loaded += Window_Loaded;
             mediaPlayer.MediaEnded += new EventHandler(MediaPlayer_MediaEnded);
             mediaPlayer.Open(new Uri("Resources/Pou.mp3", UriKind.Relative));
@@ -81,6 +82,7 @@ namespace Crazy_Gacha
 
             if (numegg == 0)
             {
+                Egg.MouseLeftButtonDown -= Egg_MouseLeftButtonDown;
                 mediaPlayer.Pause();             
                 var storyboard = new Storyboard();
                 var rotateAnimation = new DoubleAnimation(0, 15, TimeSpan.FromSeconds(0.1));
@@ -217,11 +219,12 @@ namespace Crazy_Gacha
                     Premio.Closed += (sender, args) =>
                     {
                         // Detener la reproducción del sonido cuando se cierre la ventana
-                        player?.Stop();
+                        waveOut?.Stop();
                         mediaPlayer.Play();
+                        Egg.MouseLeftButtonDown += Egg_MouseLeftButtonDown;
                     };
 
-                    Premio.Show();
+                    Premio.ShowDialog();
                 }
                 else
                 {
@@ -247,36 +250,6 @@ namespace Crazy_Gacha
             await ReproducirSonidoDesdeURL(audioUrl);
         }
 
-
-        private void ReproducirSonido(byte[] audioData)
-        {
-            try
-            {
-                string tempFilePath = System.IO.Path.GetTempFileName();
-                File.WriteAllBytes(tempFilePath, audioData);
-
-                // Cambiar la extensión del archivo temporal a .mp3
-                string mp3FilePath = System.IO.Path.ChangeExtension(tempFilePath, ".mp3");
-                File.Move(tempFilePath, mp3FilePath);
-
-                // Crear un reproductor MediaPlayer y reproducir el archivo temporal
-                player = new MediaPlayer();
-                player.Open(new Uri(mp3FilePath));
-                player.Play();
-
-                // Esperar hasta que se complete la reproducción si es necesario
-                player.MediaEnded += (sender, e) =>
-                {
-                    player.Close();
-                    File.Delete(mp3FilePath); // Eliminar el archivo temporal
-                };
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al reproducir audio: {ex.Message}", "Error");
-            }
-        }
-
         async Task ReproducirSonidoDesdeURL(string audioUrl)
         {
             using (var httpClient = new HttpClient())
@@ -287,7 +260,7 @@ namespace Crazy_Gacha
 
                     using (MemoryStream audioStream = new MemoryStream(audioBytes))
                     {
-                        using (var waveOut = new WaveOutEvent()) // WaveOutEvent para reproducir el audio
+                        using (waveOut = new WaveOutEvent()) // WaveOutEvent para reproducir el audio
                         {
                             using (var waveStream = new Mp3FileReader(audioStream))
                             {
@@ -295,7 +268,7 @@ namespace Crazy_Gacha
                                 waveOut.Play();
                                 while (waveOut.PlaybackState == PlaybackState.Playing)
                                 {
-                                    await Task.Delay(100); // Espera hasta que termine de reproducirse
+                                    await Task.Delay(100);
                                 }
                             }
                         }
@@ -437,7 +410,18 @@ namespace Crazy_Gacha
                 query = "SELECT cantidad FROM tienda WHERE nombreMejora='+1 click' AND idUsuario=@idUsu";
                 command = new MySqlCommand(query, conn);
                 command.Parameters.AddWithValue("@idUsu", idUsuario);
-                clicksUser = (int)command.ExecuteScalar();
+
+                object result = command.ExecuteScalar();
+
+                if (result != null && result != DBNull.Value)
+                {
+                    clicksUser = Convert.ToInt32(result);
+                }
+                else
+                {
+                    clicksUser = 1;
+                }
+
                 conn.Close();
             }
             catch (MySqlException ex)
